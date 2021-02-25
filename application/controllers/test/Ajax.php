@@ -13,7 +13,12 @@ class Ajax extends CI_Controller
 
 	public function todolist()
 	{
-		$this->load->view('ajax/todolist');
+		$lists = $this->db->get('test_todolist');
+		$lists = $lists->result_array();
+
+		$data['lists'] = $lists;
+
+		$this->load->view('ajax/todolist', $data);
 	}
 
 	//handle request from ajax
@@ -52,7 +57,23 @@ class Ajax extends CI_Controller
 		$delete = $this->db->delete('test_todolist');
 
 		echo $todoId;
-	}	
+	}
+
+	//handle request from ajax
+	public function edit_todo()
+	{
+		$todoId = $this->input->post('id');
+		$content = $this->input->post('content');
+
+		echo $content;
+		echo $todoId;
+
+		$data['content'] = $content;
+
+		$this->db->where('id', $todoId);
+		$this->db->update('test_todolist', $data);
+
+	}		
 
 	public function fb()
 	{
@@ -93,6 +114,67 @@ class Ajax extends CI_Controller
 		}		
 		$this->db->where('id', 1);
 		$this->db->update('fb', $data);
+	}
 
+		//handle request from ajax
+	public function add_comment($artworkId = 0)
+	{
+		$comment = $this->input->post('comment');
+		$userId = $this->session->userdata('userid');
+
+		if (! empty($comment)) {
+			$data = 
+			[
+					'user_id' => $userId,
+					'artwork_id' => $artworkId,
+					'body' => $comment,
+			];
+			$this->db->insert('comment', $data);
+			$id = $this->db->insert_id();
+		}
+
+		$response['id'] = $id;
+		$response['content'] = $comment;
+
+		$user = $this->db->where('id', $userId);
+		$user = $this->db->get('user');
+		$userFirstName = $user->row('first_name');
+		$userLastName = $user->row('last_name');
+
+		$response['userFirstName'] = $userFirstName;
+		$response['userLastName'] = $userLastName;
+
+
+		$createdAt = $this->db->where('id', $id);
+		$createdAt = $this->db->get('comment');
+		$createdAt = $createdAt->row('created_at');
+
+		$response['createdAt'] = $createdAt;
+
+ 		echo json_encode($response);
+	}
+
+	//handle request from ajax
+	public function delete_comment()
+	{
+		$commentId = $this->input->post('id');
+
+		$delete = $this->db->where('id', $commentId);
+		$delete = $this->db->delete('comment');
+	}
+
+	//handle request from ajax
+	public function edit_comment()
+	{
+		$id = $this->input->post('id');
+		$content = $this->input->post('comment');
+
+		echo $content;
+		echo $todoId;
+
+		$data['body'] = $content;
+
+		$this->db->where('id', $id);
+		$this->db->update('comment', $data);		
 	}
 }

@@ -36,12 +36,27 @@
   			  </div> 
 
     			<div class="col-5">
-    				<input type="text" class="form-control" id="gender" value="<?php echo $fb['gender'];?>"/>
-            &nbsp<small class="text-muted">Gender</small>
+
+            <div id="genderNonEditable">
+              <div id="genderText" class="lead"><?php echo $fb['gender'];?></div>
+              <small class="text-muted">Gender</small>
+            </div>
+
+            <div id="genderEditable" class="d-none">
+              <input id="gender" class="form-control" value="<?php echo $fb['gender'];?>">
+            </div>
+
     			</div>
 
-          <div class="col-1 ml-auto">
-            <h2 class="fal fa-pen" id="editGender"></h2>
+          <div class="col-6 ml-auto text-right">
+
+            <button class="btn btn-light" id="editGenderBtn">
+              <i class="fal fa-pen"></i>
+            </button>
+
+            <button class="btn btn-primary d-none" id="cancelGenderBtn">Cancel</button>
+            <button class="btn btn-primary d-none" id="saveGenderBtn">Save</button>
+            
           </div>
   			</div>
 
@@ -125,9 +140,39 @@
     $(function(){
 
       //edit info
-      $('#editGender').click(function() { 
+      $('#editGenderBtn').click(function() { 
+
+        $('#genderNonEditable').addClass('d-none');
+        $('#genderEditable').removeClass('d-none');
+
+        $('#cancelGenderBtn, #saveGenderBtn').removeClass('d-none');
+
+        //#editGenderBtn or (this)
+        $('#editGenderBtn').addClass('d-none');
+      });
+
+      $('#cancelGenderBtn').click(function() { 
+
+        $('#genderNonEditable').removeClass('d-none');
+        $('#genderEditable').addClass('d-none');
+
+        $('#cancelGenderBtn, #saveGenderBtn').addClass('d-none');
+
+        //#editGenderBtn or (this)
+        $('#editGenderBtn').removeClass('d-none');
+
+        var staticText = $('#genderText').html();
+        $('#gender').val(staticText);
+      });
+
+      $('#saveGenderBtn').click(function() {
 
         var info = $('#gender').val();
+
+        $('#saveGenderBtn').html('Saving...');
+        $('#saveGenderBtn').prop('disabled', true);
+        $('#cancelGenderBtn').prop('disabled', true);
+
         $.ajax({
           //Setup options
           url: "<?php echo site_url('test/ajax/edit'); ?>",
@@ -136,10 +181,25 @@
           data: {
             "gender" : info
           }
-        }).done(function(response)  {
-          alert('Info Updated !');
+        }).done(function(response) {
+
+          $('#genderNonEditable').removeClass('d-none');
+          $('#genderEditable').addClass('d-none');
+
+          $('#cancelGenderBtn, #saveGenderBtn').addClass('d-none');
+
+           //#editGenderBtn or (this)
+          $('#editGenderBtn').removeClass('d-none');
+
+          var inputText = $('#gender').val();
+          $('#genderText').html(inputText);
+
+          $('#saveGenderBtn').html('Save');
+          $('#saveGenderBtn').prop('disabled', false);
+          $('#cancelGenderBtn').prop('disabled', false);
         })
-      });
+
+      });            
 
       $('#editBirthdate').click(function() {
 
