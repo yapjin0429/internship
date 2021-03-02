@@ -45,6 +45,22 @@ class Portfolio extends CI_Controller
 		$artwork = $query->row_array();
 		$data['artwork'] = $artwork;
 
+		$query = $this->db->where('artwork_id', $artworkid);
+		$query = $this->db->where('user_id', $userID);    		
+		$query = $this->db->get('reaction');
+		$reaction = $query->row_array();
+
+		$isLiked = false;
+		if (! empty($reaction)) {
+			$isLiked = true;
+		}
+		$data['isLiked'] =$isLiked;
+
+		$query2 = $this->db->where('artwork_id', $artworkid);
+		$query2 = $this->db->get('reaction');
+		$number   = $query2->num_rows();
+		$data['number'] = $number;
+
  		$this->form_validation->set_rules('comment', 'Comment', 'required');
 
  		if ($this->form_validation->run()) {
@@ -77,7 +93,8 @@ class Portfolio extends CI_Controller
 
 		$data['comments'] = $comments;
 
-
+		// echo "<pre>";
+		// print_r($data);
 		$this->load->view('portfolio/view_artwork', $data);
 	}
 

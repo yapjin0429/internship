@@ -55,7 +55,7 @@
         </ul>
       </div>
     </div>
-
+ 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script
@@ -157,7 +157,7 @@
 
           var nonEditable = $(this).data('target');
           var editable = $(this).data('target-2');
-          //alert(editable);
+          alert(editable);
           $(nonEditable).addClass('d-none');
           $(editable).removeClass('d-none');         
         });          

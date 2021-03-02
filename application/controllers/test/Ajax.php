@@ -169,12 +169,58 @@ class Ajax extends CI_Controller
 		$id = $this->input->post('id');
 		$content = $this->input->post('comment');
 
-		echo $content;
-		echo $todoId;
+		// echo $content;
+		// echo $todoId;
 
 		$data['body'] = $content;
 
 		$this->db->where('id', $id);
 		$this->db->update('comment', $data);		
 	}
-}
+
+	public function like($artworkId = 0)
+	{
+		$userId = $this->session->userdata('userid');
+
+		if (empty ($userId)) {
+			show_404();
+		}
+
+		$data = 
+		[
+			'artwork_id' => $artworkId,
+			'user_id'    => $userId,
+		];
+		$this->db->insert('reaction', $data);
+		$data['message'] = "like success";
+
+		$number = $this->db->where('artwork_id', $artworkId);
+		$number = $this->db->get('reaction');
+		$number   = $number->num_rows();
+		$data['number'] = $number;
+
+		echo json_encode($data);
+
+	}
+
+	public function dislike($artworkId = 0)
+	{
+		$userId = $this->session->userdata('userid');
+
+		if (empty ($userId)) {
+			show_404();
+		}
+
+		$delete = $this->db->where('artwork_id', $artworkId);
+		$delete = $this->db->where('user_id', $userId);
+		$delete = $this->db->delete('reaction');
+		$data['message'] = "dislike success";	
+
+		$number = $this->db->where('artwork_id', $artworkId);
+		$number = $this->db->get('reaction');
+		$number   = $number->num_rows();
+		$data['number'] = $number;
+
+		echo json_encode($data);
+	}
+} 

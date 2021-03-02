@@ -32,15 +32,29 @@
 				  <div class="collapse navbar-collapse" id="navbarNav">
 				    <ul class="navbar-nav">
 				      <li class="nav-item">
-				      	<div class="col-3">
-								<a href="#" class="fas fa-thumbs-up"></a>
-								</div>
+
+				      	<?php if ($isLiked == 0) : ?>
+					      	<a href="" id="likeBtn">
+										<i class="far fa-thumbs-up"></i>								
+									</a>
+									<a href="" id="dislikeBtn" class="d-none">
+										<i class="fas fa-thumbs-up"></i>																
+									</a>									
+									
+								<?php endif; ?>
+
+								<?php if ($isLiked == 1) : ?>
+									<a href="" id="likeBtn" class="d-none">
+										<i class="far fa-thumbs-up"></i>								
+									</a>
+					      	<a href="" id="dislikeBtn">
+										<i class="fas fa-thumbs-up"></i>																		
+									</a>									
+								<?php endif; ?>	
+
+								<p id="likeNumber">(<?php echo $number; ?>)</p>								
 				      </li>
-				      <li class="nav-item">
-				      	<div class="col-3">
-				        <a href="#" class="fas fa-thumbs-down"></a>
-				        </div>
-				      </li>
+
 				    </ul>
 				    <ul class="nav navbar-nav ml-auto">
 				    	<li><a href="<?php echo site_url('portfolio/edit_artwork/'.$artwork['id']); ?>" class="btn btn-secondary">Edit</a></li>
@@ -58,77 +72,71 @@
 					<!-- Comment -->
 					<?php foreach ($comments as $comment) : ?>
 
-						<!-- <div id="<?php echo 'nonEditable_'.$comment['id']; ?>"> -->
+						<div  id="<?php echo 'ne_comment_'.$comment['id']; ?>" class="comment col-12 mt-3 p-3" style="background: #f4f4f4 ; border-radius:25px">
 
-							<div  id="<?php echo 'ne_comment_'.$comment['id']; ?>" class="comment col-12 mt-3 p-3" style="background: #f4f4f4 ; border-radius:25px">
-
-									<div class="row">
-										<!-- Avatar -->
-										<div class="comment-avatar col-1">
-											<img class="rounded img-fluid" src="https://i.imgur.com/RpzrMR2.jpg">
+							<div class="row">
+								<!-- Avatar -->
+								<div class="comment-avatar col-1">
+									<img class="rounded img-fluid" src="https://i.imgur.com/RpzrMR2.jpg">
+								</div>
+								<!-- Content -->
+									<div class="comment-content col-11">
+										<div class="comment-author"><b><?php echo $comment['user_first_name']?>&nbsp 
+										<?php echo $comment['user_last_name'] ?></b></div>
+										<div id="<?php echo 'content_'.$comment['id']; ?>" class="comment-text">
+											<?php echo $comment['body'] ?>
 										</div>
-										<!-- Content -->
-											<div class="comment-content col-11">
-												<div class="comment-author"><b><?php echo $comment['user_first_name']?>&nbsp 
-												<?php echo $comment['user_last_name'] ?></b></div>
-												<div id="<?php echo 'content_'.$comment['id']; ?>" class="comment-text">
-													<?php echo $comment['body'] ?>
-												</div>
-											  <div class="comment-timestamp text-muted"><small><?php echo $comment['created_at'] ?></small></div>
+									  <div class="comment-timestamp text-muted"><small><?php echo $comment['created_at'] ?></small></div>
 
-											  <div class="row">
-													&nbsp&nbsp&nbsp
-												  <div id="<?php echo 'delBtn_'.$comment['id']; ?>" class="js-delete-comment" data-id="<?php echo $comment['id']; ?>">
-												  	<a href="#"><small>Delete</small></a>
-												  </div>
-												  &nbsp|&nbsp
-												  <div id="<?php echo 'editBtn_'.$comment['id']; ?>" class="js-edit-comment" data-id="<?php echo $comment['id']; ?>">
-												  	<a href="#"><small>Edit</small></a>
-												  </div>	
+									  <div class="row">
+											&nbsp&nbsp&nbsp
+										  <a href="#" id="<?php echo 'delBtn_'.$comment['id']; ?>" class="js-delete-comment" data-id="<?php echo $comment['id']; ?>">
+										  	<small>Delete</small>
+										  </a>
+										  &nbsp|&nbsp
+										  <a href="#" id="<?php echo 'editBtn_'.$comment['id']; ?>" class="js-edit-comment" data-target="#<?php echo 'ne_comment_'.$comment['id']; ?>" data-target-2="#<?php echo 'e_comment_'.$comment['id']; ?>">
+										  	<small>Edit</small>
+										  </a>	
 
-											  </div>
+									  </div>
 
-											</div>
-								  </div>
+									</div>
+						  </div>
+						</div>
 
-							</div>
-						<!-- </div> -->
 
-						<!-- <div id="<?php echo 'editable_'.$comment['id']; ?>"> -->
+						<div  id="<?php echo 'e_comment_'.$comment['id']; ?>" class="comment col-12 mt-3 p-3 d-none" style="background: #f4f4f4 ; border-radius:25px">
 
-							<div  id="<?php echo 'e_comment_'.$comment['id']; ?>" class="comment col-12 mt-3 p-3" style="background: #f4f4f4 ; border-radius:25px">
-
-									<div class="row">
-										<!-- Avatar -->
-										<div class="comment-avatar col-1">
-											<img class="rounded img-fluid" src="https://i.imgur.com/RpzrMR2.jpg">
+							<div class="row">
+								<!-- Avatar -->
+								<div class="comment-avatar col-1">
+									<img class="rounded img-fluid" src="https://i.imgur.com/RpzrMR2.jpg">
+								</div>
+								<!-- Content -->
+									<div class="comment-content col-11">
+										<div class="comment-author"><b><?php echo $comment['user_first_name']?>&nbsp 
+										<?php echo $comment['user_last_name'] ?></b></div>
+										<div class="comment-text">
+											<input class="form-control col-6" id="<?php echo 'input_'.$comment['id']; ?>" data-id="<?php echo $comment['id']; ?>" value="<?php echo $comment['body']; ?>">
 										</div>
-										<!-- Content -->
-											<div class="comment-content col-11">
-												<div class="comment-author"><b><?php echo $comment['user_first_name']?>&nbsp 
-												<?php echo $comment['user_last_name'] ?></b></div>
-												<div class="comment-text">
-													<input class="form-control col-6" id="<?php echo 'input_'.$comment['id']; ?>" data-id="<?php echo $comment['id']; ?>" value="<?php echo $comment['body']; ?>">
-												</div>
-											  <div class="comment-timestamp text-muted"><small><?php echo $comment['created_at'] ?></small></div>
+									  <div class="comment-timestamp text-muted"><small><?php echo $comment['created_at'] ?></small></div>
 
-											  <div class="row">
-													&nbsp&nbsp&nbsp
-												  <div id="<?php echo 'cancelBtn_'.$comment['id']; ?>" class="js-cancel-comment" data-id="<?php echo $comment['id']; ?>">
-												  	<a href="#"><small>Cancel</small></a>
-												  </div>
-												  &nbsp|&nbsp
-												  <div id="<?php echo 'saveBtn_'.$comment['id']; ?>" class="js-save-comment" data-id="<?php echo $comment['id']; ?>">
-												  	<a href="#"><small>Save</small></a>
-												  </div>	
+									  <div class="row">
+											&nbsp&nbsp&nbsp
+										  <a href="#" id="<?php echo 'cancelBtn_'.$comment['id']; ?>" class="js-cancel-comment" data-id="<?php echo $comment['id']; ?>" data-target="#<?php echo 'e_comment_'.$comment['id']; ?>" data-target-2="#<?php echo 'ne_comment_'.$comment['id']; ?>">
+										  	<small>Cancel</small>
+										  </a>
+										  &nbsp|&nbsp
+										  <a href="#" id="<?php echo 'saveBtn_'.$comment['id']; ?>" class="js-save-comment" data-id="<?php echo $comment['id']; ?>" data-target="<?php echo 'e_comment_'.$comment['id']; ?>" data-target-2="<?php echo 'ne_comment_'.$comment['id']; ?>">
+										  	<small>Save</small>
+										  </a>	
 
-											  </div>
+									  </div>
 
-											</div>
-								  </div>
+									</div>
+						  </div>
+						</div>
 
-							</div>
-						<!-- </div> -->
 
 					<?php endforeach; ?>
 
@@ -180,8 +188,7 @@
         console.log(data);
 
         var html = `
-          <div id="nonEditable_${data.id}">
-					 <div id="comment_${data.id}" class="comment col-12 mt-3 p-3" style="background: #f4f4f4 ; border-radius:25px">
+					<div id="ne_comment_${data.id}" class="comment col-12 mt-3 p-3" style="background: #f4f4f4 ; border-radius:25px">
 
 							<div class="row">
 								<!-- Avatar -->
@@ -192,7 +199,7 @@
 									<div class="comment-content col-11">
 										<div class="comment-author"><b>${data.userFirstName}&nbsp 
 										${data.userLastName}</b></div>
-										<div class="comment-text">
+										<div id="content_${data.id}" class="comment-text">
 											${data.content}
 										</div>
 									  <div class="comment-timestamp text-muted"><small>${data.createdAt}</small></div>
@@ -202,18 +209,16 @@
 											  	<a href="#"><small>Delete</small></a>
 											  </div>
 											  &nbsp|&nbsp
-											  <div id="editBtn_.${data.id}" class="js-edit-comment" data-id="${data.id}">
+											  <div id="editBtn_.${data.id}" class="js-edit-comment" data-id="${data.id}" data-target="#ne_comment_${data.id}" data-target-2="#e_comment_${data.id}">
 											  	<a href="#"><small>Edit</small></a>
 											  </div>	
 
 									  </div>
 									</div>
 						  </div>
-					 </div>
-				  </div>
+					</div>
 
-				  <div id="editable_${data.id}">
-						<div  id="e_comment_${data.id}" class="comment col-12 mt-3 p-3" style="background: #f4f4f4 ; border-radius:25px">
+					<div  id="e_comment_${data.id}" class="comment col-12 mt-3 p-3 d-none" style="background: #f4f4f4 ; border-radius:25px">
 
 									<div class="row">
 										<!-- Avatar -->
@@ -225,17 +230,17 @@
 												<div class="comment-author"><b>${data.userFirstName}&nbsp 
 												${data.userLastName}</b></div>
 												<div class="comment-text">
-													<input class="form-control col-6" id="input_${data.id}; ?>" data-id="${data.id}" value="${data.content}">
+													<input class="form-control col-6" id="input_${data.id}" data-id="${data.id}" value="${data.content}">
 												</div>
-											  <div class="comment-timestamp text-muted"><small><?php echo $comment['created_at'] ?></small></div>
+											  <div class="comment-timestamp text-muted"><small>${data.createdAt}</small></div>
 
 											  <div class="row">
 													&nbsp&nbsp&nbsp
-												  <div id="<?php echo 'cancelBtn_'.$comment['id']; ?>" class="js-cancel-comment" data-id="${data.id}">
+												  <div id="cancelBtn${data.id}" class="js-cancel-comment" data-id="${data.id}" data-target="#e_comment_${data.id}" data-target-2="#ne_comment_${data.id}">
 												  	<a href="#"><small>Cancel</small></a>
 												  </div>
 												  &nbsp|&nbsp
-												  <div id="<?php echo 'saveBtn_'.$comment['id']; ?>" class="js-save-comment" data-id="${data.id}">
+												  <div id="saveBtn_${data.id}" class="js-save-comment" data-id="${data.id}" data-target="#e_comment_${data.id}" data-target-2="#ne_comment_${data.id}">
 												  	<a href="#"><small>Save</small></a>
 												  </div>	
 
@@ -243,21 +248,23 @@
 
 											</div>
 								  </div>
-						</div>
-				 	</div>
-					`;
+					</div>
+
+				`;
 					commentList.append(html);
 
 					$('#addCommentBtn').html('Post');
 					$('#addCommentBtn').prop('disabled', false);
       })
     });
+		//e means event
+    $('body').on('click', '.js-delete-comment', function(e) {
 
-    $('body').on('click', '.js-delete-comment', function() {
+    	e.preventDefault();
     	var id = $(this).data('id');
     	
-      $('#delBtn'+id).html('Deleting');
-      $('#delBtn'+id).prop('disabled', true);
+      $('#delBtn_'+id).html('Deleting');
+      $('#delBtn_'+id).prop('disabled', true);
 
 
       $.ajax({
@@ -270,32 +277,40 @@
         }
       }).done(function(response){
           //Dummy function to simulate todo deletion
-          $('#comment_'+id).remove();
-          $('#delBtn'+id).html('Delete');
-          $('#delBtn'+id).prop('disabled', false); 
+          $('#ne_comment_'+id).remove();
+          $('#e_comment_'+id).remove();
+          $('#delBtn_'+id).html('Delete');
+          $('#delBtn_'+id).prop('disabled', false); 
 
           alert('comment deleted');          
       })
     });
 
-    $('body').on('click', '.js-edit-comment', function() {
+    $('body').on('click', '.js-edit-comment', function(e) {
 
-    	var id = $(this).data('id');
-      var nonEditable = $('#nonEditable_'+id);
-      var editable = $('#Editable_'+id);
-      //alert(editable);
+    	// var id = $(this).data('id');
+      //  var nonEditable = $('#ne_comment_'+id);
+      //  var editable = $('#e_comment_'+id);
+      //  alert ($('#e_comment_'+id));
+      e.preventDefault();
+
+      var nonEditable = $(this).data('target');
+      var editable = $(this).data('target-2');
+
       $(nonEditable).addClass('d-none');
       $(editable).removeClass('d-none');  
     });
 
-    $('body').on('click', '.js-save-comment', function() {
-
+    $('body').on('click', '.js-save-comment', function(e) {
+    	e.preventDefault(); //prevent page refreshing
       var id = $(this).data('id');
       var info = $('#input_'+id).val();
+			//alert(id);
+      $('#saveBtn_'+id).html('Saving...');
+      $('#saveBtn_'+id).prop('disabled', true);
+      $('#cancelBtn_'+id).prop('disabled', true);
 
-      $('#saveBtn'+id).html('Saving...');
-      $('#saveBtn'+id).prop('disabled', true);
-      $('#cancelBtn'+id).prop('disabled', true);
+      
 
     	$.ajax({
             //Setup options
@@ -306,27 +321,87 @@
               "comment" : info,
               "id" : id
             }
-       }).done(function(response){
+      }).done(function(response){
 
-       	 alert('data successfully edited !');
-       	 $('#saveBtn'+id).html('Save');
-		     $('#saveBtn'+id).prop('disabled', false);
-		     $('#cancelBtn'+id).prop('disabled', false);
+     	  alert('data successfully edited !');
+     	  $('#saveBtn_'+id).html('Save');
+	      $('#saveBtn_'+id).prop('disabled', false);
+	      $('#cancelBtn_'+id).prop('disabled', false);
 
-		     $('#content_'+id).html(info);
+        var editable = $(this).data('target');
+        var nonEditable = $(this).data('target-2');
 
+        $('#e_comment_'+id).addClass('d-none');
+        $('#ne_comment_'+id).removeClass('d-none');
+
+	      $('#content_'+id).html(info);
+				console.log($('#content_'+id).html());
        })
     });
 
-    $('body').on('click', '.js-cancel-comment', function() {
+    $('body').on('click', '.js-cancel-comment', function(e) {
+    	e.preventDefault();
+    	var id = $(this).data('id');
+      var staticText = $('#content_'+id).html();
+      $('#input_'+id).val(staticText);
 
-      var id = $(this).data('id');
-      var editable = $('#nonEditable_'+id);
-      var nonEditable = $('#Editable_'+id);
+      // var id = $(this).data('id');
+      // var editable = $('#ne_comment_'+id);
+      // var nonEditable = $('#e_comment_'+id);
       //alert(editable);
+
+      var editable = $(this).data('target');
+      var nonEditable = $(this).data('target-2');
+
       $(editable).addClass('d-none');
       $(nonEditable).removeClass('d-none'); 	
-    });        
+    });
+
+    $('#likeBtn').click(function(e) {
+
+    	$('#likeBtn').addClass('d-none');
+      $('#dislikeBtn').removeClass('d-none');  
+
+    	e.preventDefault();
+      $.ajax({
+        //Setup options
+        url: "<?php echo site_url('test/ajax/like/'.$artwork['id']); ?>",
+        type: "POST",
+        // dataType: "json",
+      }).done(function(response){
+      	console.log(response);
+      	var data = JSON.parse(response);
+
+        alert(data.message);
+
+        console.log(data.number);
+
+        $('#likeNumber').html(data.number);
+      })
+    });
+
+    $('#dislikeBtn').click(function(e) {
+
+    	$('#dislikeBtn').addClass('d-none');
+      $('#likeBtn').removeClass('d-none');  
+
+    	e.preventDefault();
+      $.ajax({
+        //Setup options
+        url: "<?php echo site_url('test/ajax/dislike/'.$artwork['id']); ?>",
+        type: "POST",
+        // dataType: "json",
+      }).done(function(response){
+      	console.log(response);
+        var data = JSON.parse(response);
+
+        alert(data.message);
+
+        console.log(data.number);
+
+       $('#likeNumber').html(data.number);				         
+      })
+    });         
 	</script>
 
 </body>
